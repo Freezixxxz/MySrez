@@ -1,26 +1,51 @@
 generator client {
-  provider   = "prisma-client-js"
-  output     = "../src/generated/prisma"
-  engineType = "library" 
+  provider        = "prisma-client-js"
+  output          = "../src/generated/prisma"
+  engineType      = "library"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
   provider = "postgresql"
 }
 
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  username  String    @unique
+  password  String    // В идеале тут будет хэш (например, bcrypt)
+  avatar    String?
+  bio       String?   // Описание профиля "О себе"
+  
+  // Связи
+  products  Product[] // Товары, которые юзер продает
+  chats     Chat[]    // Чаты, в которых состоит юзер
+  messages  Message[] // Сообщения, написанные юзером
+
+  createdAt DateTime  @default(now())
+  
+  @@map("users")
+}
+
 model Product {
   id              Int      @id @default(autoincrement())
-  img             String
+  img             String   // Ссылка на загруженную картинку
   title           String
   description     String
   basePrice       Float
   discountPercent Int      @default(0)
   rating          Float    @default(0)
-  categories      String[] 
   
-  // 👇 Добавленные поля для связи с продавцом
-  sellerId        Int?     // Знак вопроса означает, что поле необязательное (чтобы не сломать старые данные)
-  seller          User?    @relation(fields: [sellerId], references: [id])
+  // Категории и игры
+  game            String   // Например: "CS2", "Dota 2", "Genshin Impact"
+  categories      String[] // Например: ["Скины", "Аккаунты", "Ключи"]
+  
+  // Статус
+  isSold          Boolean  @default(false) // Если true - товар куплен, скрываем из каталога
+  
+  // Продавец
+  sellerId        Int
+  seller          User     @relation(fields: [sellerId], references: [id])
 
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -28,17 +53,30 @@ model Product {
   @@map("products")
 }
 
-model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  username  String    @unique
-  password  String    // Тут пока будет обычный текст, потом добавим шифрование
-  avatar    String?
-  
-  // 👇 Связь с товарами
-  products  Product[] 
+// === НОВЫЕ ТАБЛИЦЫ ДЛЯ ЧАТОВ ===
 
-  createdAt DateTime  @default(now())
+model Chat {
+  id        Int       @id @default(autoincrement())
+  users     User[]    // В чате обычно 2 участника (продавец и покупатель)
+  messages  Message[]
   
-  @@map("users")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  
+  @@map("chats")
+}
+
+model Message {
+  id        Int      @id @default(autoincrement())
+  text      String
+  
+  chatId    Int
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  
+  senderId  Int
+  sender    User     @relation(fields: [senderId], references: [id])
+  
+  createdAt DateTime @default(now())
+
+  @@map("messages")
 }
