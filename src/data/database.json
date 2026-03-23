@@ -1,0 +1,54 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "img": "/images/products/img-1.jpg",
+      "title": "World of Tanks Blitz",
+      "description": "Аккаунт самый крутой!!!",
+      "basePrice": 499.0,
+      "discountPercent": 50,
+      "rating": 4.9,
+      "categories": ["WoTBlitz", "Accounts"]
+    },
+    {
+      "id": 2,
+      "img": "/images/products/img-2.jpg",
+      "title": "World of Tanks Blitz",
+      "description": "Покупайте только у меня",
+      "basePrice": 389.0,
+      "discountPercent": 15,
+      "rating": 4.5,
+      "categories": ["WoTBlitz", "Accounts"]
+    },
+    {
+      "id": 3,
+      "img": "/images/products/img-3.jpg",
+      "title": "1000 Голды",
+      "description": "Дешевая голда!!",
+      "basePrice": 999.0,
+      "discountPercent": 7,
+      "rating": 5.0,
+      "categories": ["WoTBlitz", "Accounts"]
+    },
+    {
+      "id": 4,
+      "img": "/images/products/img-4.jpg",
+      "title": "Читы!!",
+      "description": "ВХ АИМ без вирусов",
+      "basePrice": 199.0,
+      "discountPercent": 50,
+      "rating": 3.4,
+      "categories": ["WoTBlitz", "Accounts"]
+    },
+    {
+      "id": 5,
+      "img": "/images/products/img-5.jpg",
+      "title": "Буст",
+      "description": "Лучший бустер",
+      "basePrice": 9999.99,
+      "discountPercent": 0,
+      "rating": 1.5,
+      "categories": ["WoTBlitz", "Accounts"]
+    }
+  ]
+}

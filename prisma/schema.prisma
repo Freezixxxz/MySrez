@@ -1,0 +1,44 @@
+generator client {
+  provider   = "prisma-client-js"
+  output     = "../src/generated/prisma"
+  engineType = "library" 
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Product {
+  id              Int      @id @default(autoincrement())
+  img             String
+  title           String
+  description     String
+  basePrice       Float
+  discountPercent Int      @default(0)
+  rating          Float    @default(0)
+  categories      String[] 
+  
+  // 👇 Добавленные поля для связи с продавцом
+  sellerId        Int?     // Знак вопроса означает, что поле необязательное (чтобы не сломать старые данные)
+  seller          User?    @relation(fields: [sellerId], references: [id])
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("products")
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
+  username  String    @unique
+  password  String    // Тут пока будет обычный текст, потом добавим шифрование
+  avatar    String?
+  
+  // 👇 Связь с товарами
+  products  Product[] 
+
+  createdAt DateTime  @default(now())
+  
+  @@map("users")
+}
